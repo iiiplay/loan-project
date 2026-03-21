@@ -43,7 +43,7 @@
         }
 
         /* 表單與結果：白色卡片 */
-        #loan-form,
+        .loan-form,
         .result {
             background: #ffffff;
             border-radius: 10px;
@@ -222,6 +222,17 @@
             font-weight: 400;
             letter-spacing: 1px;
         }
+
+        @media (max-width: 768px) {
+
+            .loan-form input[type="number"],
+            .loan-form select {
+                width: 300px;
+                /* 強制覆蓋之前的寬度設定 */
+                padding: 12px;
+                font-size: 1.1rem;
+            }
+        }
     </style>
 </head>
 
@@ -257,8 +268,6 @@
                     <option value="30">30</option>
                     <option value="40">40</option>
                 </select> 年
-                <input type="number" id="handlingFree" name="handlingFree" placeholder="手動輸入年限" required>
-
             </div>
             <div class="form-row">
                 <label for="repayment">還款方式</label>
