@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .parent {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            background-color: #f0f0f0;
+        }
+
+        .child {
+            padding: 20px;
+            background-color: #007bff;
+            color: white;
+        }
+
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            gap: 10px;
+        }
+
+        label {
+            width: 100px;
+            text-align: right;
+        }
+
+        input {
+            flex: 1;
+            /* 關鍵！讓輸入框自動「伸展」填滿剩下的空間 */
+            padding: 8px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin: 12px;
+        }
+
+        .search-box input {
+            flex: 1;
+            /* 輸入框填滿 */
+            border: 1px solid #ccc;
+            border-radius: 4px 0 0 4px;
+            /* 圓角只留左邊 */
+            padding: 10px;
+        }
+
+        .search-box button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            /* 圓角只留右邊 */
+            padding: 0 20px;
+            cursor: pointer;
+        }
+
+        #navbar {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 6px;
+
+        }
+
+        .button {
+            color: white;
+            width: 100px;
+            text-align: center;
+            padding: 12px;
+            border-radius: 6px;
+            background-color: #007bff;
+        }
+
+        /* 2. 導覽列容器 (父層) */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            /* 關鍵：把 Logo 和選單推向兩端 */
+            align-items: center;
+            /* 關鍵：讓內容在垂直方向居中 */
+            background-color: #333;
+            padding: 0 40px;
+            /* 左右內距，讓內容不貼邊 */
+            height: 70px;
+            /* 固定高度，方便觀察垂直置中 */
+            color: white;
+        }
+
+        /* 3. 選單清單 (也是一個 Flex 容器) */
+        .nav-links {
+            display: flex;
+            /* 讓 <li> 橫向排列 */
+            list-style: none;
+            /* 移除清單小圓點 */
+            gap: 30px;
+            /* 關鍵：設定連結之間的固定間距 */
+        }
+
+        .logo a {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffdd57;
+            text-decoration: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #ffdd57;
+            /* 滑鼠移上去變色 */
+        }
+    </style>
+</head>
+
+<body>
+    <!DOCTYPE html>
+    <html lang="zh-TW">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Flexbox Navbar 範例</title>
+    </head>
+
+    <body>
+
+        <nav class="navbar">
+            <div class="logo">
+                <a href="#">🚀 我的教學網</a>
+            </div>
+
+            <ul class="nav-links">
+                <li><a href="#">首頁</a></li>
+                <li><a href="#">C# 課程</a></li>
+                <li><a href="#">Python 實戰</a></li>
+                <li><a href="#">聯絡我</a></li>
+            </ul>
+        </nav>
+
+    </body>
+
+    </html>
+
+    <div class="parent">
+        <div class="child">我是置中的內容</div>
+    </div>
+    <div class="form-group">
+        <label>使用者名稱</label>
+        <input type="text" placeholder="請輸入姓名">
+    </div>
+    <div class="form-group">
+        <label>電子郵件</label>
+        <input type="email" placeholder="example@mail.com">
+    </div>
+
+    <div class="search-box">
+        <input type="text" placeholder="搜尋產品...">
+        <button>搜尋</button>
+    </div>
+
+
+
+
+</body>
+
+</html>
