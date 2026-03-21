@@ -36,20 +36,41 @@
             padding-left: 12px;
         }
 
-        /* 容器：預設 block，自然上下排列 */
+        /* 核心改動：.container 變成 flex 容器 */
         .container {
-            max-width: 900px;
+            max-width: 1100px;
             margin: 0 auto;
+            display: flex;
+            /* ← 開啟 Flexbox */
+            flex-direction: row;
+            /* ← 子元素水平排列 */
+            gap: 24px;
+            /* ← 左右間距 */
+            align-items: flex-start;
+            /* ← 頂部對齊，不強制等高 */
+            padding: 24px;
         }
 
-        /* 表單與結果：白色卡片 */
-        #loan-form,
-        .result {
+        /* 表單：固定寬度，不隨視窗縮放 */
+        .loan-form {
+            flex: 0 0 390px;
+            padding: 30px 12px;
+            background: #ffffff;
+            border-radius: 10px;
+            /* grow=0, shrink=0, basis=340px */
+        }
+
+        /* 結果區：填滿剩餘空間 */
+        #result {
+            flex: 1;
+            /* 自動佔用剩餘寬度 */
+            min-width: 0;
+            /* 防止內容溢出 */
             background: #ffffff;
             border-radius: 10px;
             padding: 24px;
-            margin-bottom: 24px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            overflow-x: auto;
         }
 
         /* 每一列輸入欄位 */
@@ -222,6 +243,37 @@
             font-weight: 400;
             letter-spacing: 1px;
         }
+
+        /* 小畫面 RWD 調整 */
+        @media (max-width: 768px) {
+            body {
+                padding: 12px;
+            }
+
+            .container {
+                flex-direction: column;
+                /* 改為垂直排列 */
+                padding: 12px;
+                gap: 16px;
+            }
+
+            .loan-form {
+                flex: none;
+                /* 取消固定寬度 */
+                width: 100%;
+                background: #ffffff;
+                border-radius: 10px;
+                padding: 20px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+
+            }
+
+            #result {
+                width: 100%;
+                /* 寬度佔滿 */
+            }
+
+        }
     </style>
 </head>
 
@@ -257,7 +309,6 @@
                     <option value="30">30</option>
                     <option value="40">40</option>
                 </select> 年
-                <input type="number" id="handlingFree" name="handlingFree" placeholder="手動輸入年限" required>
 
             </div>
             <div class="form-row">
@@ -272,50 +323,50 @@
             <button type="submit" id="clacBtn">計算</button>
 
         </form>
-        <div>
+
+
+        <div id="result">
             <h2>試算結果</h2>
-            <div id="result">
-                <!-- 摘要表格 -->
-                <table class="summary-table">
-                    <thead>
-                        <tr>
-                            <th>項目</th>
-                            <th>金額</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>每月還款金額</td>
-                            <td id="monthlyPayment">66666</td>
-                        </tr>
-                        <tr>
-                            <td>總還款金額</td>
-                            <td id="totalPayment">1666666</td>
-                        </tr>
-                        <tr>
-                            <td>總利息支出</td>
-                            <td id="totalInterest">1000000</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <!-- 摘要表格 -->
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>項目</th>
+                        <th>金額</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>每月還款金額</td>
+                        <td id="monthlyPayment">66666</td>
+                    </tr>
+                    <tr>
+                        <td>總還款金額</td>
+                        <td id="totalPayment">1666666</td>
+                    </tr>
+                    <tr>
+                        <td>總利息支出</td>
+                        <td id="totalInterest">1000000</td>
+                    </tr>
+                </tbody>
+            </table>
 
-                <!-- 分期明細表格 -->
-                <table class="schedule-table">
-                    <thead>
-                        <tr>
-                            <th>期數</th>
-                            <th>月付金額</th>
-                            <th>本金</th>
-                            <th>利息</th>
-                            <th>剩餘本金</th>
-                        </tr>
-                    </thead>
-                    <tbody id="scheduleBody">
-                        <!-- JavaScript 動態填入 -->
+            <!-- 分期明細表格 -->
+            <table class="schedule-table">
+                <thead>
+                    <tr>
+                        <th>期數</th>
+                        <th>月付金額</th>
+                        <th>本金</th>
+                        <th>利息</th>
+                        <th>剩餘本金</th>
+                    </tr>
+                </thead>
+                <tbody id="scheduleBody">
+                    <!-- JavaScript 動態填入 -->
 
-                    </tbody>
-                </table>
-            </div>
+                </tbody>
+            </table>
         </div>
     </div>
 </body>
