@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .parent {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            background-color: #f0f0f0;
+        }
+
+        .child {
+            padding: 20px;
+            background-color: #007bff;
+            color: white;
+        }
+
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            gap: 10px;
+        }
+
+        label {
+            width: 100px;
+            text-align: right;
+        }
+
+        input {
+            flex: 1;
+            /* 關鍵！讓輸入框自動「伸展」填滿剩下的空間 */
+            padding: 8px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin: 12px;
+        }
+
+        .search-box input {
+            flex: 1;
+            /* 輸入框填滿 */
+            border: 1px solid #ccc;
+            border-radius: 4px 0 0 4px;
+            /* 圓角只留左邊 */
+            padding: 10px;
+        }
+
+        .search-box button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            /* 圓角只留右邊 */
+            padding: 0 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="parent">
+        <div class="child">我是置中的內容</div>
+    </div>
+    <div class="form-group">
+        <label>使用者名稱</label>
+        <input type="text" placeholder="請輸入姓名">
+    </div>
+    <div class="form-group">
+        <label>電子郵件</label>
+        <input type="email" placeholder="example@mail.com">
+    </div>
+
+    <div class="search-box">
+        <input type="text" placeholder="搜尋產品...">
+        <button>搜尋</button>
+    </div>
+
+
+
+
+</body>
+
+</html>
