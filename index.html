@@ -4,84 +4,319 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>貸款試算APP V0.1</title>
+    <title>貸款精算助手</title>
+    <style>
+        /* 全域重置 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: sans-serif;
+            background-color: #f4fbff;
+            color: #1e2c3b;
+            padding: 24px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #063e5f;
+            margin-bottom: 24px;
+            text-align: center;
+            font-weight: 800;
+        }
+
+        h2 {
+            font-size: 1.4rem;
+            color: #2589c9;
+            margin: 16px 0px;
+            border-left: 5px solid #2589c9;
+            padding-left: 12px;
+        }
+
+        /* 容器：預設 block，自然上下排列 */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* 表單與結果：白色卡片 */
+        #loan-form,
+        .result {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        /* 每一列輸入欄位 */
+        .form-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .form-row label {
+            width: 90px;
+            /* 固定標籤寬度，讓輸入框對齊 */
+            font-weight: bold;
+            color: #063e5f;
+            flex-shrink: 0;
+            /* 標籤不縮小 */
+        }
+
+        .loan-form input[type="number"],
+        .loan-form select {
+            padding: 8px 10px;
+            border: 1px solid #b0d4ee;
+            border-radius: 6px;
+            font-size: 1rem;
+            width: 200px;
+        }
+
+
+        /* 單位文字（萬、%、元、年） */
+        .form-row .unit {
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        /* 還款方式 Radio 群組 */
+        .radio-group {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            width: auto;
+            /* 覆蓋 .form-row label 的固定寬度 */
+        }
+
+        input,
+        select {
+            text-align: center;
+        }
+
+        input[type="radio"] {
+            accent-color: #2589c9;
+            width: 16px;
+            height: 16px;
+        }
+
+        /* 摘要表格 */
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 24px;
+        }
+
+        .summary-table th,
+        .summary-table td {
+            padding: 10px 14px;
+            text-align: left;
+            border-bottom: 1px solid #e5f6ff;
+        }
+
+        .summary-table thead th {
+            background-color: #2589c9;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .summary-table tbody tr:hover {
+            background-color: #f0f8ff;
+        }
+
+        /* 金額欄位靠右對齊 */
+        .summary-table td:last-child {
+            text-align: right;
+            font-weight: bold;
+            color: #063e5f;
+        }
+
+        /* 分期明細表格 */
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .schedule-table th {
+            background-color: #063e5f;
+            color: #ffffff;
+            padding: 10px;
+            position: sticky;
+            top: 0;
+            /* 固定表頭，捲動時仍可見 */
+            text-align: center;
+        }
+
+        .schedule-table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #e5f6ff;
+            text-align: right;
+        }
+
+        .schedule-table td:first-child {
+            text-align: center;
+            /* 期數置中 */
+            color: #2589c9;
+            font-weight: bold;
+        }
+
+        .schedule-table tbody tr:nth-child(even) {
+            background-color: #f7fbff;
+            /* 斑馬紋 */
+        }
+
+        /* 計算按鈕 */
+        #clacBtn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background-color: #2589c9;
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        #clacBtn:hover {
+            background-color: #1a6fa8;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            /* 稍微加大 */
+            color: #063e5f;
+            margin-bottom: 24px;
+            text-align: center;
+            font-weight: 800;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            /* 標題與副標題的間距 */
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: #6a8ba2;
+            /* 較淡的顏色 */
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+    </style>
 </head>
 
 <body>
-    <h1>貸款試算APP V0.1</h1>
-    <hr>
-    <form id="loanForm" action="">
-        <label for="amount">貸款金額</label>&nbsp;&nbsp;&nbsp;&nbsp;
-        <input type="number" id="amount" name="amount" value="100" step="10" min="10" required> 萬
-        <br>
-        <label for="rate">貸款利率</label>&nbsp;&nbsp;&nbsp;&nbsp;
-        <input type="number" id="rate" name="rate" value="1.85" step="0.01" min="1"> %
-        <br>
-        <!-- 新增手續費用欄位  handlingFree-->
-        <label for="handlingFree">貸款手續費</label>
-        <input type="number" id="handlingFree" name="handlingFree" placeholder="請輸入相關手續費" required> 元
-        <br>
-        <label for="loanYears">貸款年限</label>&nbsp;&nbsp;&nbsp;&nbsp;
-        <select name="loanYears" id="loanYears">
-            <option value="3">3</option>
-            <option value="5">5</option>
-            <option value="7" selected>7</option>
-            <option value="10">10</option>
-            <option value="15">15</option>
-            <option value="20">20</option>
-            <option value="30">30</option>
-            <option value="40">40</option>
-        </select> 年
-        <br>
-        <label for="repayment">還款方式</label>
-        <input type="radio" id="repayment1" name="repayment" value="repaymentMethod1" checked>本息平均攤還
-        <input type="radio" id="repayment2" name="repayment" value="repaymentMethod2">本金平均攤還
-        <br>
-        <button type="submit" id="clacBtn">計算</button>
+    <h1>
+        貸款精算助手
+        <span class="subtitle">輸入條件，快速分析您的還款計畫</span>
+    </h1>
+    <div class="container">
+        <form id="loanForm" class="loan-form" action="">
+            <div class="form-row">
+                <label for="amount">貸款金額</label>
+                <input type="number" id="amount" name="amount" value="100" step="10" min="10" required> 萬
+            </div>
+            <div class="form-row">
+                <label for="rate">貸款利率</label>
+                <input type="number" id="rate" name="rate" value="1.85" step="0.01" min="1"> %
+            </div>
+            <div class="form-row">
+                <!-- 新增手續費用欄位  handlingFree-->
+                <label for="handlingFree">貸款手續費</label>
+                <input type="number" id="handlingFree" name="handlingFree" placeholder="請輸入相關手續費" required> 元
+            </div>
+            <div class="form-row">
+                <label for="loanYears">貸款年限</label>
+                <select name="loanYears" id="loanYears">
+                    <option value="3">3</option>
+                    <option value="5">5</option>
+                    <option value="7" selected>7</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="40">40</option>
+                </select> 年
+                <input type="number" id="handlingFree" name="handlingFree" placeholder="手動輸入年限" required>
 
-    </form>
-    <div>
-        <h2>試算結果</h2>
+            </div>
+            <div class="form-row">
+                <label for="repayment">還款方式</label>
+                <div class="radio-group">
+                    <label for="repayment1"><input type="radio" id="repayment1" name="repayment"
+                            value="repaymentMethod1" checked>本息平均攤還</label>
+                    <label for="repayment2"><input type="radio" id="repayment2" name="repayment"
+                            value="repaymentMethod2">本金平均攤還</label>
+                </div>
+            </div>
+            <button type="submit" id="clacBtn">計算</button>
 
-        <!-- 摘要表格 -->
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>項目</th>
-                    <th>金額</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>每月還款金額</td>
-                    <td id="monthlyPayment">--</td>
-                </tr>
-                <tr>
-                    <td>總還款金額</td>
-                    <td id="totalPayment">--</td>
-                </tr>
-                <tr>
-                    <td>總利息支出</td>
-                    <td id="totalInterest">--</td>
-                </tr>
-            </tbody>
-        </table>
+        </form>
+        <div>
+            <h2>試算結果</h2>
+            <div id="result">
+                <!-- 摘要表格 -->
+                <table class="summary-table">
+                    <thead>
+                        <tr>
+                            <th>項目</th>
+                            <th>金額</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>每月還款金額</td>
+                            <td id="monthlyPayment">66666</td>
+                        </tr>
+                        <tr>
+                            <td>總還款金額</td>
+                            <td id="totalPayment">1666666</td>
+                        </tr>
+                        <tr>
+                            <td>總利息支出</td>
+                            <td id="totalInterest">1000000</td>
+                        </tr>
+                    </tbody>
+                </table>
 
-        <!-- 分期明細表格 -->
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>期數</th>
-                    <th>月付金額</th>
-                    <th>本金</th>
-                    <th>利息</th>
-                    <th>剩餘本金</th>
-                </tr>
-            </thead>
-            <tbody id="scheduleBody">
-                <!-- JavaScript 動態填入 -->
-            </tbody>
-        </table>
+                <!-- 分期明細表格 -->
+                <table class="schedule-table">
+                    <thead>
+                        <tr>
+                            <th>期數</th>
+                            <th>月付金額</th>
+                            <th>本金</th>
+                            <th>利息</th>
+                            <th>剩餘本金</th>
+                        </tr>
+                    </thead>
+                    <tbody id="scheduleBody">
+                        <!-- JavaScript 動態填入 -->
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </body>
 
