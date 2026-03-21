@@ -1,27 +1,25 @@
 <!DOCTYPE html>
 <html lang="zh-tw">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>貸款試算APP V0.1</title>
 </head>
+
 <body>
     <h1>貸款試算APP V0.1</h1>
     <hr>
-    <form id="loanForm"  action="">
+    <form id="loanForm" action="">
         <label for="amount">貸款金額</label>&nbsp;&nbsp;&nbsp;&nbsp;
-        <input type="number" id="amount" name="amount"
-        value="100" step="10"  min="10" required
-        > 萬   
-        <br> 
+        <input type="number" id="amount" name="amount" value="100" step="10" min="10" required> 萬
+        <br>
         <label for="rate">貸款利率</label>&nbsp;&nbsp;&nbsp;&nbsp;
-        <input type="number" id="rate" name="rate" 
-        value="1.85" step="0.01" min="1"> %
+        <input type="number" id="rate" name="rate" value="1.85" step="0.01" min="1"> %
         <br>
         <!-- 新增手續費用欄位  handlingFree-->
         <label for="handlingFree">貸款手續費</label>
-        <input type="number" id="handlingFree" name="handlingFree"
-        placeholder="請輸入相關手續費" required> 元
+        <input type="number" id="handlingFree" name="handlingFree" placeholder="請輸入相關手續費" required> 元
         <br>
         <label for="loanYears">貸款年限</label>&nbsp;&nbsp;&nbsp;&nbsp;
         <select name="loanYears" id="loanYears">
@@ -40,7 +38,51 @@
         <input type="radio" id="repayment2" name="repayment" value="repaymentMethod2">本金平均攤還
         <br>
         <button type="submit" id="clacBtn">計算</button>
-    
+
     </form>
+    <div>
+        <h2>試算結果</h2>
+
+        <!-- 摘要表格 -->
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>項目</th>
+                    <th>金額</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>每月還款金額</td>
+                    <td id="monthlyPayment">--</td>
+                </tr>
+                <tr>
+                    <td>總還款金額</td>
+                    <td id="totalPayment">--</td>
+                </tr>
+                <tr>
+                    <td>總利息支出</td>
+                    <td id="totalInterest">--</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- 分期明細表格 -->
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>期數</th>
+                    <th>月付金額</th>
+                    <th>本金</th>
+                    <th>利息</th>
+                    <th>剩餘本金</th>
+                </tr>
+            </thead>
+            <tbody id="scheduleBody">
+                <!-- JavaScript 動態填入 -->
+            </tbody>
+        </table>
+    </div>
 </body>
+
 </html>
