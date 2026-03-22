@@ -14,23 +14,24 @@
 
         body {
             font-family: sans-serif;
-            background-color: #f4fbff;
+            background-color: #cadde9;
             padding: 24px;
             color: #1e2c3b;
+            text-align: center;
         }
 
         h1,
         h2 {
-            font-size: 2rem;
+            font-size: 2.5rem;
             color: #063e5f;
             margin-bottom: 1rem;
         }
 
         h2 {
+            text-align: left;
             font-size: 1.5rem;
+            margin-bottom: 0.5rem;
         }
-
-
 
         .container {
             max-width: 900px;
@@ -94,6 +95,63 @@
             height: 16px;
             accent-color: #2589c9;
         }
+
+        .result {
+            box-shadow: 10px 10px rgb(83, 131, 133);
+        }
+
+        .summary-table,
+        .detial-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 24px;
+        }
+
+        .detial-table th {
+            background-color: #063e5f;
+            color: #ffff;
+            padding: 10px;
+        }
+
+        .detial-table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #e5f6ff;
+        }
+
+        .summary-table td:first-child {
+            color: #063e5f;
+            font-weight: bold;
+        }
+
+
+
+
+        .detial-table tr:nth-child(even) {
+            background-color: #81b8d8;
+            color: #063e5f;
+        }
+
+
+        .summary-table th {
+            background-color: #2589c9;
+            color: #ffff;
+        }
+
+
+
+        .summary-table th,
+        .summary-table td {
+            border: 1px solid #afc4cf;
+            padding: 10px 12px;
+            text-align: left;
+        }
+
+        .subtitle {
+            font: 0.5em sans-serif;
+            color: #6a8ba2;
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
     </style>
 
 
@@ -102,8 +160,9 @@
 
 <body>
     <div class="container">
-        <h1>貸款試算APP V0.1</h1>
-        <hr>
+        <h1>貸款精算助手
+            <span class="subtitle">輸入條件，快速分析您的還款計畫</span>
+        </h1>
         <form id="loanForm" action="" class="loan-form">
             <div class="form-row">
                 <label for="amount">貸款金額</label>
@@ -139,10 +198,10 @@
             <button type="submit" id="clacBtn">計算</button>
 
         </form>
-        <h2>試算結果</h2>
+        <h2>｜試算結果</h2>
         <div class="result">
             <!-- 摘要表格 -->
-            <table border="1">
+            <table class="summary-table">
                 <thead>
                     <tr>
                         <th>項目</th>
@@ -152,21 +211,21 @@
                 <tbody>
                     <tr>
                         <td>每月還款金額</td>
-                        <td id="monthlyPayment">--</td>
+                        <td id="monthlyPayment">6666</td>
                     </tr>
                     <tr>
                         <td>總還款金額</td>
-                        <td id="totalPayment">--</td>
+                        <td id="totalPayment">166666</td>
                     </tr>
                     <tr>
                         <td>總利息支出</td>
-                        <td id="totalInterest">--</td>
+                        <td id="totalInterest">3666666</td>
                     </tr>
                 </tbody>
             </table>
 
             <!-- 分期明細表格 -->
-            <table border="1">
+            <table border="1" class="detial-table">
                 <thead>
                     <tr>
                         <th>期數</th>
@@ -177,7 +236,34 @@
                     </tr>
                 </thead>
                 <tbody id="scheduleBody">
-                    <!-- JavaScript 動態填入 -->
+                    <tr>
+                        <td>1</td>
+                        <td>10000</td>
+                        <td>100000</td>
+                        <td>6666</td>
+                        <td>1000000</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>10000</td>
+                        <td>100000</td>
+                        <td>6666</td>
+                        <td>1000000</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>10000</td>
+                        <td>100000</td>
+                        <td>6666</td>
+                        <td>1000000</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>10000</td>
+                        <td>100000</td>
+                        <td>6666</td>
+                        <td>1000000</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
