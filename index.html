@@ -190,7 +190,8 @@
                 <input type="radio" id="repayment1" name="repayment" value="repaymentMethod1" checked>本息平均攤還
                 <input type="radio" id="repayment2" name="repayment" value="repaymentMethod2">本金平均攤還
             </div>
-            <button type="submit" id="clacBtn">計算</button>
+            <!-- 後端才需要submit -->
+            <button type="button" id="clacBtn">計算</button>
 
         </form>
         <h2>｜試算結果</h2>
@@ -263,6 +264,40 @@
             </table>
         </div>
     </div>
+
+
+    <script>
+        const title = document.querySelector("h1");
+        console.log(title);
+
+        title.style.color = "orange";
+
+        // 1.只改文字 
+        title.innerText = "超級助手!";
+        //2.含標籤語法
+        title.innerHTML = "<b style='background-color:blue'>超級助手!</b>";
+
+        const amountEl = document.querySelector("#amount");
+        const rateEl = document.querySelector("#rate");
+        const loanYearsEl = document.querySelector("#loanYears");
+        const calcBtnEl = document.querySelector("#clacBtn");
+        console.log(amountEl, rateEl, loanYearsEl, calcBtnEl);
+
+        calcBtnEl.addEventListener("click", function (e) {
+            let amount = amountEl.value;
+            let rate = rateEl.value;
+            let loanYears = loanYearsEl.value;
+
+            let method = document.querySelector(
+                "input[name='repayment']:checked"
+            ).value;
+
+
+            console.log(amount, rate, loanYears, method);
+
+        });
+
+    </script>
 </body>
 
 </html>
