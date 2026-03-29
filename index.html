@@ -207,15 +207,15 @@
                 <tbody>
                     <tr>
                         <td>每月還款金額</td>
-                        <td id="monthlyPayment">6666</td>
+                        <td id="monthlyPayment">-</td>
                     </tr>
                     <tr>
                         <td>總還款金額</td>
-                        <td id="totalPayment">166666</td>
+                        <td id="totalPayment">-</td>
                     </tr>
                     <tr>
                         <td>總利息支出</td>
-                        <td id="totalInterest">3666666</td>
+                        <td id="totalInterest">-</td>
                     </tr>
                 </tbody>
             </table>
@@ -232,34 +232,7 @@
                     </tr>
                 </thead>
                 <tbody id="scheduleBody">
-                    <tr>
-                        <td>1</td>
-                        <td>10000</td>
-                        <td>100000</td>
-                        <td>6666</td>
-                        <td>1000000</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>10000</td>
-                        <td>100000</td>
-                        <td>6666</td>
-                        <td>1000000</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>10000</td>
-                        <td>100000</td>
-                        <td>6666</td>
-                        <td>1000000</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>10000</td>
-                        <td>100000</td>
-                        <td>6666</td>
-                        <td>1000000</td>
-                    </tr>
+
                 </tbody>
             </table>
         </div>
@@ -267,15 +240,15 @@
 
 
     <script>
-        const title = document.querySelector("h1");
-        console.log(title);
+        // const title = document.querySelector("h1");
+        // console.log(title);
 
-        title.style.color = "orange";
+        // title.style.color = "orange";
 
-        // 1.只改文字 
-        title.innerText = "超級助手!";
-        //2.含標籤語法
-        title.innerHTML = "<b style='background-color:blue'>超級助手!</b>";
+        // // 1.只改文字 
+        // title.innerText = "超級助手!";
+        // //2.含標籤語法
+        // title.innerHTML = "<b style='background-color:blue'>超級助手!</b>";
 
         const amountEl = document.querySelector("#amount");
         const rateEl = document.querySelector("#rate");
@@ -296,12 +269,34 @@
 
             console.log(amount, rate, loanYears, method);
 
-            repaymentMethod1(amount * 10000, rate, loanYears);
+            let schedules = repaymentMethod1(amount * 10000, rate, loanYears);
 
+            renderTable(schedules);
         });
 
+        //繪製Table
+        function renderTable(schedules) {
+            let tableHtml = "";
 
 
+            for (let i = 0; i < schedules.length; i++) {
+                tableHtml += `
+                    <tr>
+                        <td> ${schedules[i].month}</td>
+                        <td> ${schedules[i].monthlyPayment + schedules[i].interest}</td>
+                        <td> ${schedules[i].monthlyPayment}</td>
+                        <td> ${schedules[i].interest}</td>
+                        <td> ${schedules[i].amount}</td>
+                    </tr>
+                `;
+            }
+
+            console.log(tableHtml);
+
+            document.querySelector("#scheduleBody").innerHTML = tableHtml;
+        }
+
+        //本金平均攤還
         function repaymentMethod1(amount, rate, years) {
             let monthRate = rate / 100 / 12; //月利率
             let months = years * 12;    //總期數
