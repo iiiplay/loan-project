@@ -187,8 +187,8 @@
             </div>
             <div class="form-row">
                 <label for="repayment">還款方式</label>
-                <input type="radio" id="repayment1" name="repayment" value="repaymentMethod1" checked>本息平均攤還
-                <input type="radio" id="repayment2" name="repayment" value="repaymentMethod2">本金平均攤還
+                <input type="radio" id="repayment1" name="repayment" value="repaymentMethod1" checked>本金平均攤還
+                <input type="radio" id="repayment2" name="repayment" value="repaymentMethod2">本息平均攤還
             </div>
             <!-- 後端才需要submit -->
             <button type="button" id="clacBtn">計算</button>
@@ -288,6 +288,7 @@
             let rate = rateEl.value;
             let loanYears = loanYearsEl.value;
 
+            //多個radio共用name的取值方式`
             let method = document.querySelector(
                 "input[name='repayment']:checked"
             ).value;
@@ -295,7 +296,46 @@
 
             console.log(amount, rate, loanYears, method);
 
+            repaymentMethod1(amount * 10000, rate, loanYears);
+
         });
+
+
+
+        function repaymentMethod1(amount, rate, years) {
+            let monthRate = rate / 100 / 12; //月利率
+            let months = years * 12;    //總期數
+
+            let monthlyPayment = Math.round(amount / months);
+            console.log(monthRate, months, monthlyPayment);
+
+            schedules = [];
+            for (let i = 0; i < months; i++) {
+                let interest = Math.round(amount * monthRate);
+                amount -= monthlyPayment;
+
+                //最後一期
+                if (i == months - 1) {
+                    monthlyPayment += amount;
+                    amount = 0;
+                }
+
+                console.log(`${i + 1} 本金:${monthlyPayment} 利息:${interest} 剩餘餘額:${amount}`);
+                schedules.push(
+                    {
+                        "month": i + 1,
+                        "monthlyPayment": monthlyPayment,
+                        "interest": interest,
+                        "amount": amount
+                    }
+                );
+
+            }
+
+            console.log(schedules);
+
+            return schedules;
+        }
 
     </script>
 </body>
