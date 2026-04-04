@@ -8,6 +8,66 @@
 
     <link rel="stylesheet" href="css/style.css">
     <script src="js/utils.js"></script>
+    <style>
+        /* RWD 響應式設定 */
+        @media (max-width: 600px) {
+
+            /* 1. 調整外層容器間距 */
+            body {
+                padding: 12px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            /* 2. 表單行改為垂直排列 */
+            .form-row {
+                flex-direction: column;
+                /* 轉為垂直堆疊 */
+                align-items: flex-start;
+                /* 靠左對齊 */
+                gap: 8px;
+            }
+
+            .form-row label {
+                width: 100%;
+                text-align: left;
+            }
+
+            /* 3. 讓輸入框與選擇框撐滿寬度 */
+            input[type="number"],
+            select {
+                width: 100%;
+                max-width: none;
+            }
+
+            /* 4. 修改按鈕佈局（如果有匯出按鈕） */
+            .loan-form div[style*="display: flex"] {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            #clacBtn,
+            #exportBtn {
+                width: 100%;
+                margin-top: 10px;
+            }
+
+            /* 5. 表格字體稍微縮小，避免在手機上太擁擠 */
+            .detial-table,
+            .summary-table {
+                font-size: 0.9rem;
+            }
+
+            .detial-table td,
+            .detial-table th {
+                padding: 6px 4px;
+                white-space: nowrap;
+                /* 確保內容不會斷行，讓 scroll 控制 */
+            }
+        }
+    </style>
 
 </head>
 
@@ -44,11 +104,9 @@
                 <input type="radio" id="repayment2" name="repayment" value="repaymentMethod2">本息平均攤還
             </div>
             <!-- 後端才需要submit -->
-            <div style="display: flex; gap: 10px;">
-                <button type="button" id="clacBtn">計算</button>
-                <button type="button" id="exportBtn">輸出
-                    CSV</button>
-            </div>
+
+            <button type="button" id="clacBtn">計算</button>
+
         </form>
         <h2>｜試算結果</h2>
         <div class="result">
@@ -75,7 +133,7 @@
                     </tr>
                 </tbody>
             </table>
-
+            <button hidden style="background-color: rgb(0, 247, 255);" type="button" id="exportBtn">輸出CSV</button>
             <!-- 分期明細表格 -->
             <div class="table-wrapper">
                 <table border="1" class="detial-table">
@@ -93,6 +151,7 @@
                     </tbody>
                 </table>
             </div>
+
         </div>
     </div>
 
@@ -130,6 +189,8 @@
 
             let schedules = repaymentMethod1(amount * 10000, rate, loanYears);
             currentSchedules = schedules; // 儲存結果供匯出使用
+
+            document.querySelector("#exportBtn").hidden = false; // 顯示匯出按鈕
             renderTable(schedules);
             renderSummary(schedules);
         });
