@@ -157,139 +157,142 @@
 
 
     <script>
-        // const title = document.querySelector("h1");
-        // console.log(title);
-
-        // title.style.color = "orange";
-
-        // // 1.只改文字 
-        // title.innerText = "超級助手!";
-        // //2.含標籤語法
-        // title.innerHTML = "<b style='background-color:blue'>超級助手!</b>";
-        let currentSchedules = [];
+       let currentSchedules = [];
 
         const amountEl = document.querySelector("#amount");
         const rateEl = document.querySelector("#rate");
         const loanYearsEl = document.querySelector("#loanYears");
         const calcBtnEl = document.querySelector("#clacBtn");
-        console.log(amountEl, rateEl, loanYearsEl, calcBtnEl);
 
         calcBtnEl.addEventListener("click", function (e) {
-            let amount = amountEl.value;
-            let rate = rateEl.value;
-            let loanYears = loanYearsEl.value;
+            let amount = parseFloat(amountEl.value);
+            let rate = parseFloat(rateEl.value);
+            let loanYears = parseInt(loanYearsEl.value);
 
-            //多個radio共用name的取值方式`
-            let method = document.querySelector(
-                "input[name='repayment']:checked"
-            ).value;
+            // 取得還款方式
+            let method = document.querySelector("input[name='repayment']:checked").value;
 
+            // 根據選取的方法執行對應函數
+            let schedules = [];
+            if (method === "repaymentMethod1") {
+                schedules = repaymentMethod1(amount * 10000, rate, loanYears);
+            } else {
+                schedules = repaymentMethod2(amount * 10000, rate, loanYears);
+            }
 
-            console.log(amount, rate, loanYears, method);
-
-            let schedules = repaymentMethod1(amount * 10000, rate, loanYears);
-            currentSchedules = schedules; // 儲存結果供匯出使用
-
-            document.querySelector("#exportBtn").hidden = false; // 顯示匯出按鈕
+            currentSchedules = schedules; 
+            document.querySelector("#exportBtn").hidden = false; 
             renderTable(schedules);
-            renderSummary(schedules);
+            renderSummary(schedules, method); // 傳入 method 判斷文字顯示
         });
 
-
-        function renderSummary(schedules) {
+        function renderSummary(schedules, method) {
             const monthlyPaymentEl = document.querySelector("#monthlyPayment");
             const totalPaymentEl = document.querySelector("#totalPayment");
             const totalInterestEl = document.querySelector("#totalInterest");
 
-
-            monthlyPaymentEl.innerText = `第一期為: ${schedules[0].monthlyPayment + schedules[0].interest} 元`;
-
-            let totalInterest = 0;
-            let totalPayment = 0;
-            for (let schedule of schedules) {
-                totalInterest += schedule.interest;
-
-                totalPayment += schedule.monthlyPayment;
+            // 判斷摘要顯示文字
+            if (method === "repaymentMethod1") {
+                monthlyPaymentEl.innerText = `第一期為: ${schedules[0].monthlyPayment + schedules[0].interest} 元 (遞減)`;
+            } else {
+                monthlyPaymentEl.innerText = `每月固定: ${schedules[0].monthlyPayment + schedules[0].interest} 元`;
             }
 
-            totalInterestEl.innerText = totalInterest + " 元";
+            let totalInterest = 0;
+            let totalPrincipal = 0;
+            for (let schedule of schedules) {
+                totalInterest += schedule.interest;
+                totalPrincipal += schedule.monthlyPayment;
+            }
 
-            totalPaymentEl.innerText = `${totalPayment + totalInterest} 元 (約佔本金 ${((totalInterest / totalPayment) * 100).toFixed(2)}%)`;
-
-
-
+            totalInterestEl.innerText = Math.round(totalInterest).toLocaleString() + " 元";
+            totalPaymentEl.innerText = `${Math.round(totalPrincipal + totalInterest).toLocaleString()} 元 (約佔本金 ${((totalInterest / totalPrincipal) * 100).toFixed(2)}%)`;
         }
 
-        //繪製Table
         function renderTable(schedules) {
             let tableHtml = "";
-
-
             for (let i = 0; i < schedules.length; i++) {
                 tableHtml += `
                     <tr>
                         <td> ${schedules[i].month}</td>
-                        <td> ${schedules[i].monthlyPayment + schedules[i].interest}</td>
-                        <td> ${schedules[i].monthlyPayment}</td>
-                        <td> ${schedules[i].interest}</td>
-                        <td> ${schedules[i].amount}</td>
+                        <td> ${(schedules[i].monthlyPayment + schedules[i].interest).toLocaleString()}</td>
+                        <td> ${schedules[i].monthlyPayment.toLocaleString()}</td>
+                        <td> ${schedules[i].interest.toLocaleString()}</td>
+                        <td> ${schedules[i].amount.toLocaleString()}</td>
                     </tr>
                 `;
             }
-
-            console.log(tableHtml);
-
             document.querySelector("#scheduleBody").innerHTML = tableHtml;
         }
 
-        //本金平均攤還
+        // --- 還款演算法 ---
+
+        // 1. 本金平均攤還 (Equal Principal)
         function repaymentMethod1(amount, rate, years) {
-            let monthRate = rate / 100 / 12; //月利率
-            let months = years * 12;    //總期數
+            let monthRate = rate / 100 / 12;
+            let months = years * 12;
+            let monthlyPrincipal = Math.round(amount / months); // 每月固定還本金
+            let schedules = [];
+            let tempAmount = amount;
 
-            let monthlyPayment = Math.round(amount / months);
-            console.log(monthRate, months, monthlyPayment);
-
-            schedules = [];
             for (let i = 0; i < months; i++) {
-                let interest = Math.round(amount * monthRate);
-                amount -= monthlyPayment;
-
-                //最後一期
-                if (i == months - 1) {
-                    monthlyPayment += amount;
-                    amount = 0;
+                let interest = Math.round(tempAmount * monthRate);
+                
+                // 最後一期處理餘數
+                if (i === months - 1) {
+                    monthlyPrincipal = tempAmount;
+                    tempAmount = 0;
+                } else {
+                    tempAmount -= monthlyPrincipal;
                 }
 
-                console.log(`${i + 1} 本金:${monthlyPayment} 利息:${interest} 剩餘餘額:${amount}`);
-                schedules.push(
-                    {
-                        "month": i + 1,
-                        "monthlyPayment": monthlyPayment,
-                        "interest": interest,
-                        "amount": amount
-                    }
-                );
-
+                schedules.push({
+                    "month": i + 1,
+                    "monthlyPayment": monthlyPrincipal,
+                    "interest": interest,
+                    "amount": tempAmount
+                });
             }
-
-
-            console.log(schedules);
-
             return schedules;
         }
 
-        // CSV 匯出邏輯
-        document.querySelector("#exportBtn").addEventListener("click", function () {
-            if (currentSchedules.length === 0) {
-                alert("請先進行計算再匯出！");
-                return;
+        // 2. 本息平均攤還 (Equal Installment) - 新增
+        function repaymentMethod2(amount, rate, years) {
+            let monthRate = rate / 100 / 12;
+            let months = years * 12;
+
+            // 本息平均攤還公式：每月還款額 = [貸款本金 × 月利率 × (1+月利率)^n] / [(1+月利率)^n - 1]
+            let pmt = (amount * monthRate * Math.pow(1 + monthRate, months)) / (Math.pow(1 + monthRate, months) - 1);
+            pmt = Math.round(pmt); // 每月固定的本＋利
+
+            let schedules = [];
+            let tempAmount = amount;
+
+            for (let i = 0; i < months; i++) {
+                let interest = Math.round(tempAmount * monthRate); // 本期利息
+                let principal = pmt - interest; // 本期應還本金
+                
+                if (i === months - 1) {
+                    principal = tempAmount; // 最後一期還清剩餘本金
+                    tempAmount = 0;
+                } else {
+                    tempAmount -= principal;
+                }
+
+                schedules.push({
+                    "month": i + 1,
+                    "monthlyPayment": principal, // 這裡存的是當期本金
+                    "interest": interest,       // 當期利息
+                    "amount": tempAmount        // 剩餘本金
+                });
             }
+            return schedules;
+        }
 
-            // 1. 定義 CSV 表頭
+        // CSV 匯出邏輯 (保持不變)
+        document.querySelector("#exportBtn").addEventListener("click", function () {
+            if (currentSchedules.length === 0) return;
             const headers = ["期數", "月付金額", "本金", "利息", "剩餘本金"];
-
-            // 將物件陣列轉換成工具函式需要的「純資料二維陣列」
             const dataRows = currentSchedules.map(item => [
                 item.month,
                 item.monthlyPayment + item.interest,
@@ -297,9 +300,8 @@
                 item.interest,
                 item.amount
             ]);
-
-            // 執行下載
             downloadCSV(headers, dataRows, "貸款試算表");
+            downloadJSON(currentSchedules, "貸款試算表");
         });
     </script>
 </body>

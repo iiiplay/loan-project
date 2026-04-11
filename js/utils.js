@@ -30,3 +30,27 @@ function downloadCSV(headers, data, filename = "export") {
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
 }
+
+
+function downloadJSON(schedules, summary) {
+    // 1. 建立一個完整的物件結構
+    const exportData = {
+        exportDate: new Date().toISOString(),
+        summary: summary,
+        details: schedules
+    };
+
+    // 2. 序列化 (加上 null, 2 可以讓輸出的 JSON 縮排，方便閱讀)
+    const jsonString = JSON.stringify(exportData, null, 2);
+
+    // 3. 建立 Blob 並下載
+    const blob = new Blob([jsonString], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `貸款試算報告_${new Date().getTime()}.json`;
+    link.click();
+
+    URL.revokeObjectURL(url);
+}
