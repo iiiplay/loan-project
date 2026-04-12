@@ -152,6 +152,12 @@
             font-weight: 400;
             letter-spacing: 1px;
         }
+
+        #table-scroll {
+            max-height: 600px;
+            overflow-y: auto;
+            border: 1px solid rgb(26, 24, 24);
+        }
     </style>
 
 
@@ -220,21 +226,23 @@
                 </tbody>
             </table>
 
-            <!-- 分期明細表格 -->
-            <table border="1" class="detial-table">
-                <thead>
-                    <tr>
-                        <th>期數</th>
-                        <th>月付金額</th>
-                        <th>本金</th>
-                        <th>利息</th>
-                        <th>剩餘本金</th>
-                    </tr>
-                </thead>
-                <tbody id="scheduleBody">
+            <div id="table-scroll">
+                <!-- 分期明細表格 -->
+                <table border="1" class="detial-table">
+                    <thead>
+                        <tr>
+                            <th>期數</th>
+                            <th>月付金額</th>
+                            <th>本金</th>
+                            <th>利息</th>
+                            <th>剩餘本金</th>
+                        </tr>
+                    </thead>
+                    <tbody id="scheduleBody">
 
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -270,9 +278,33 @@
             console.log(amount, rate, loanYears, method);
 
             let schedules = repaymentMethod1(amount * 10000, rate, loanYears);
-
+            renderSummary(schedules);
             renderTable(schedules);
         });
+
+
+        function renderSummary(schedules) {
+            const monthlyPaymentEl = document.querySelector("#monthlyPayment");
+            const totalPaymentEl = document.querySelector("#totalPayment");
+            const totalInterestEl = document.querySelector("#totalInterest");
+
+            console.log(monthlyPaymentEl, totalPaymentEl, totalInterestEl);
+
+            monthlyPaymentEl.innerText = `第一個月還款：${schedules[0].monthlyPayment + schedules[0].interest}元`;
+
+            let totalInterest = 0, totalPayment = 0;
+            for (let i = 0; i < schedules.length; i++) {
+                totalInterest += schedules[i].interest;
+                totalPayment += schedules[i].monthlyPayment;
+            }
+
+            console.log(totalInterest, totalPayment);
+
+            totalPaymentEl.innerHTML = `<b style='color:blue'>${totalPayment + totalInterest}元</b>`;
+            totalInterestEl.innerHTML = `<b style='color:red'>${totalInterest}元</b>`;
+
+
+        }
 
         //繪製Table
         function renderTable(schedules) {
@@ -291,7 +323,7 @@
                 `;
             }
 
-            console.log(tableHtml);
+            //console.log(tableHtml);
 
             document.querySelector("#scheduleBody").innerHTML = tableHtml;
         }
