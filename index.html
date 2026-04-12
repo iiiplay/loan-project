@@ -5,161 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>貸款試算APP V0.1</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: sans-serif;
-            background-color: #cadde9;
-            padding: 24px;
-            color: #1e2c3b;
-            text-align: center;
-        }
-
-        h1,
-        h2 {
-            font-size: 2.5rem;
-            color: #063e5f;
-            margin-bottom: 1rem;
-        }
-
-        h2 {
-            text-align: left;
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .loan-form,
-        .result {
-            background-color: #ffffff;
-            border-radius: 10px;
-            margin-bottom: 24px;
-            padding: 24px;
-            box-shadow: 10px 10px;
-        }
-
-        .form-row {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .form-row label {
-            width: 90px;
-            font-weight: bold;
-            color: #063e5f;
-        }
-
-        input[type="number"],
-        select {
-            padding: 8px 10px;
-            border: 1px solid #b0d4ee;
-            border-radius: 6px;
-            font-size: 1rem;
-            width: 180px;
-        }
-
-        #clacBtn {
-            width: 100%;
-            padding: 12px;
-            margin-top: 20px;
-            font-size: 1rem;
-            font-weight: 900;
-            border-radius: 6px;
-            border: none;
-            background-color: #2589c9;
-            color: white;
-            cursor: pointer;
-            /* 過渡動畫搭配hover */
-            transition: background-color 0.2s;
-        }
-
-
-        #clacBtn:hover {
-            background-color: #0f4a6e;
-        }
-
-        input[type="radio"] {
-            width: 16px;
-            height: 16px;
-            accent-color: #2589c9;
-        }
-
-        .result {
-            box-shadow: 10px 10px rgb(83, 131, 133);
-        }
-
-        .summary-table,
-        .detial-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 24px;
-        }
-
-        .detial-table th {
-            background-color: #063e5f;
-            color: #ffff;
-            padding: 10px;
-        }
-
-        .detial-table td {
-            padding: 8px 10px;
-            border-bottom: 1px solid #e5f6ff;
-        }
-
-        .summary-table td:first-child {
-            color: #063e5f;
-            font-weight: bold;
-        }
-
-
-
-
-        .detial-table tr:nth-child(even) {
-            background-color: #81b8d8;
-            color: #063e5f;
-        }
-
-
-        .summary-table th {
-            background-color: #2589c9;
-            color: #ffff;
-        }
-
-
-
-        .summary-table th,
-        .summary-table td {
-            border: 1px solid #afc4cf;
-            padding: 10px 12px;
-            text-align: left;
-        }
-
-        .subtitle {
-            font: 0.5em sans-serif;
-            color: #6a8ba2;
-            font-weight: 400;
-            letter-spacing: 1px;
-        }
-
-        #table-scroll {
-            max-height: 600px;
-            overflow-y: auto;
-            border: 1px solid rgb(26, 24, 24);
-        }
-    </style>
-
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/utils.js"></script>
 
 
 </head>
@@ -200,7 +47,10 @@
             <button type="button" id="clacBtn">計算</button>
 
         </form>
-        <h2>｜試算結果</h2>
+        <h2>｜試算結果
+            <button id="exportBtn" type="button"> 輸出CSV</button>
+        </h2>
+
         <div class="result">
             <!-- 摘要表格 -->
             <table class="summary-table">
@@ -248,21 +98,42 @@
 
 
     <script>
-        // const title = document.querySelector("h1");
-        // console.log(title);
-
-        // title.style.color = "orange";
-
-        // // 1.只改文字 
-        // title.innerText = "超級助手!";
-        // //2.含標籤語法
-        // title.innerHTML = "<b style='background-color:blue'>超級助手!</b>";
-
+        let schedules = [];
         const amountEl = document.querySelector("#amount");
         const rateEl = document.querySelector("#rate");
         const loanYearsEl = document.querySelector("#loanYears");
         const calcBtnEl = document.querySelector("#clacBtn");
-        console.log(amountEl, rateEl, loanYearsEl, calcBtnEl);
+        const exportBtnEl = document.querySelector("#exportBtn");
+
+        console.log(amountEl, rateEl, loanYearsEl, calcBtnEl, exportBtnEl);
+
+        exportBtnEl.addEventListener("click", function (e) {
+            console.log(schedules);
+
+            if (schedules.length == 0) {
+                alert("目前無資料，請先計算!");
+                return;
+            }
+
+            let data = [];
+            const headers = ["期數", "月付金額", "本金", "利息", "剩餘本金"];
+
+            for (let i = 0; i < schedules.length; i++) {
+                data.push(
+                    [
+                        schedules[i].month,
+                        schedules[i].monthlyPayment + schedules[i].interest,
+                        schedules[i].monthlyPayment,
+                        schedules[i].interest,
+                        schedules[i].amount
+                    ]
+                );
+            }
+
+            console.log(data);
+            downloadCSV(headers, data);
+        });
+
 
         calcBtnEl.addEventListener("click", function (e) {
             let amount = amountEl.value;
@@ -277,7 +148,7 @@
 
             console.log(amount, rate, loanYears, method);
 
-            let schedules = repaymentMethod1(amount * 10000, rate, loanYears);
+            schedules = repaymentMethod1(amount * 10000, rate, loanYears);
             renderSummary(schedules);
             renderTable(schedules);
         });

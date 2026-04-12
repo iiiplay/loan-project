@@ -1,0 +1,176 @@
+ * {
+     box-sizing: border-box;
+     margin: 0;
+     padding: 0;
+ }
+
+ body {
+     font-family: sans-serif;
+     background-color: #cadde9;
+     padding: 24px;
+     color: #1e2c3b;
+     text-align: center;
+ }
+
+ h1,
+ h2 {
+     font-size: 2.5rem;
+     color: #063e5f;
+     margin-bottom: 1rem;
+ }
+
+ h2 {
+     text-align: left;
+     font-size: 1.5rem;
+     margin-bottom: 0.5rem;
+ }
+
+ .container {
+     max-width: 900px;
+     margin: 0 auto;
+ }
+
+ .loan-form,
+ .result {
+     background-color: #ffffff;
+     border-radius: 10px;
+     margin-bottom: 24px;
+     padding: 24px;
+     box-shadow: 10px 10px;
+ }
+
+ .form-row {
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     gap: 12px;
+     margin-bottom: 16px;
+ }
+
+ .form-row label {
+     width: 90px;
+     font-weight: bold;
+     color: #063e5f;
+ }
+
+ input[type="number"],
+ select {
+     padding: 8px 10px;
+     border: 1px solid #b0d4ee;
+     border-radius: 6px;
+     font-size: 1rem;
+     width: 180px;
+ }
+
+ #clacBtn {
+     width: 100%;
+     padding: 12px;
+     margin-top: 20px;
+     font-size: 1rem;
+     font-weight: 900;
+     border-radius: 6px;
+     border: none;
+     background-color: #2589c9;
+     color: white;
+     cursor: pointer;
+     /* 過渡動畫搭配hover */
+     transition: background-color 0.2s;
+ }
+
+ #exportBtn {
+     padding: 8px;
+     width: 100px;
+     /* font-size: 1rem; */
+     /* font-weight: 900; */
+     border-radius: 6px;
+     margin-bottom: 3px;
+     border: none;
+     background-color: #0fb625;
+     color: white;
+     cursor: pointer;
+ }
+
+ #exportBtn:hover {
+     background-color: #045038;
+ }
+
+
+ #clacBtn:hover {
+     background-color: #0f4a6e;
+ }
+
+ input[type="radio"] {
+     width: 16px;
+     height: 16px;
+     accent-color: #2589c9;
+ }
+
+ .result {
+     box-shadow: 10px 10px rgb(83, 131, 133);
+ }
+
+ .summary-table,
+ .detial-table {
+     width: 100%;
+     border-collapse: collapse;
+     margin-bottom: 24px;
+ }
+
+ .detial-table th {
+     background-color: #063e5f;
+     color: #ffff;
+     padding: 10px;
+ }
+
+ .detial-table td {
+     padding: 8px 10px;
+     border-bottom: 1px solid #e5f6ff;
+ }
+
+ .summary-table td:first-child {
+     color: #063e5f;
+     font-weight: bold;
+ }
+
+
+
+
+ .detial-table tr:nth-child(even) {
+     background-color: #81b8d8;
+     color: #063e5f;
+ }
+
+
+ .summary-table th {
+     background-color: #2589c9;
+     color: #ffff;
+ }
+
+
+
+ .summary-table th,
+ .summary-table td {
+     border: 1px solid #afc4cf;
+     padding: 10px 12px;
+     text-align: left;
+ }
+
+ .subtitle {
+     font: 0.5em sans-serif;
+     color: #6a8ba2;
+     font-weight: 400;
+     letter-spacing: 1px;
+ }
+
+ #table-scroll {
+     max-height: 600px;
+     overflow-y: auto;
+     border: 1px solid rgb(26, 24, 24);
+ }
+
+ #totalPayment,
+ #totalInterest {
+     font-size: 24px;
+     text-align: right;
+
+ }
